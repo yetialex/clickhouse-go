@@ -211,9 +211,9 @@ func Test_Nullable(t *testing.T) {
 					if tx, err := connect.Begin(); assert.NoError(t, err) {
 						if stmt, err := tx.Prepare(dml); assert.NoError(t, err) {
 							if _, err := stmt.Exec(
-								new(int8),
+								nil,
 								16,
-								new(int32),
+								nil,
 								64,
 								18,
 								116,
