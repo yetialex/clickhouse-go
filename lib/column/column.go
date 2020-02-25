@@ -137,36 +137,6 @@ func Factory(name, chType string, timezone *time.Location) (Column, error) {
 			},
 			Timezone: timezone,
 		}, nil
-	case "DateTime64(3)":
-		return &DateTime64{
-			base: base{
-				name:    name,
-				chType:  chType,
-				valueOf: columnBaseTypes[time.Time{}],
-			},
-			precision: 3,
-			Timezone:  timezone,
-		}, nil
-	case "DateTime64(6)":
-		return &DateTime64{
-			base: base{
-				name:    name,
-				chType:  chType,
-				valueOf: columnBaseTypes[time.Time{}],
-			},
-			precision: 6,
-			Timezone:  timezone,
-		}, nil
-	case "DateTime64(9)":
-		return &DateTime64{
-			base: base{
-				name:    name,
-				chType:  chType,
-				valueOf: columnBaseTypes[time.Time{}],
-			},
-			precision: 9,
-			Timezone:  timezone,
-		}, nil
 	case "IPv4":
 		return &IPv4{
 			base: base{
@@ -202,6 +172,8 @@ func Factory(name, chType string, timezone *time.Location) (Column, error) {
 		} else {
 			return Factory(name, nestedType, timezone)
 		}
+	case strings.HasPrefix(chType, "DateTime64"):
+		return parseDateTime64(name, chType, timezone)
 	}
 	return nil, fmt.Errorf("column: unhandled type %v", chType)
 }

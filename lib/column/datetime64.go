@@ -1,6 +1,7 @@
 package column
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/yetialex/clickhouse-go/lib/binary"
@@ -81,4 +82,20 @@ func (dt *DateTime64) parse(value string) (int64, error) {
 		tv.Second(),
 		tv.Nanosecond(), time.UTC,
 	).UnixNano(), nil
+}
+
+func parseDateTime64(name, chType string, timezone *time.Location) (*DateTime64, error) {
+	var precision int
+	if _, err := fmt.Sscanf(chType, "DateTime64(%d)", &precision); err != nil {
+		return nil, err
+	}
+	return &DateTime64{
+		base: base{
+			name:    name,
+			chType:  chType,
+			valueOf: columnBaseTypes[time.Time{}],
+		},
+		precision: precision,
+		Timezone:  timezone,
+	}, nil
 }
