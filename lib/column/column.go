@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ClickHouse/clickhouse-go/lib/binary"
+	"github.com/yetialex/clickhouse-go/lib/binary"
 )
 
 type Column interface {
@@ -136,6 +136,36 @@ func Factory(name, chType string, timezone *time.Location) (Column, error) {
 				valueOf: columnBaseTypes[time.Time{}],
 			},
 			Timezone: timezone,
+		}, nil
+	case "DateTime64(3)":
+		return &DateTime64{
+			base: base{
+				name:    name,
+				chType:  chType,
+				valueOf: columnBaseTypes[time.Time{}],
+			},
+			precision: 3,
+			Timezone:  timezone,
+		}, nil
+	case "DateTime64(6)":
+		return &DateTime64{
+			base: base{
+				name:    name,
+				chType:  chType,
+				valueOf: columnBaseTypes[time.Time{}],
+			},
+			precision: 6,
+			Timezone:  timezone,
+		}, nil
+	case "DateTime64(9)":
+		return &DateTime64{
+			base: base{
+				name:    name,
+				chType:  chType,
+				valueOf: columnBaseTypes[time.Time{}],
+			},
+			precision: 9,
+			Timezone:  timezone,
 		}, nil
 	case "IPv4":
 		return &IPv4{

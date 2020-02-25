@@ -6,25 +6,26 @@ import (
 	"github.com/yetialex/clickhouse-go/lib/binary"
 )
 
-type DateTime struct {
+type DateTime64 struct {
 	base
-	Timezone *time.Location
+	precision int
+	Timezone  *time.Location
 }
 
-func (dt *DateTime) Read(decoder *binary.Decoder) (interface{}, error) {
-	sec, err := decoder.Int32()
+func (dt *DateTime64) Read(decoder *binary.Decoder) (interface{}, error) {
+	nsec, err := decoder.Int64()
 	if err != nil {
 		return nil, err
 	}
-	return time.Unix(int64(sec), 0).In(dt.Timezone), nil
+	return time.Unix(0, nsec).In(dt.Timezone), nil
 }
 
-func (dt *DateTime) Write(encoder *binary.Encoder, v interface{}) error {
+func (dt *DateTime64) Write(encoder *binary.Encoder, v interface{}) error {
 	var timestamp int64
 	switch value := v.(type) {
 	case time.Time:
 		if !value.IsZero() {
-			timestamp = value.Unix()
+			timestamp = value.UnixNano()
 		}
 	case int16:
 		timestamp = int64(value)
@@ -41,7 +42,7 @@ func (dt *DateTime) Write(encoder *binary.Encoder, v interface{}) error {
 
 	case *time.Time:
 		if value != nil && !(*value).IsZero() {
-			timestamp = (*value).Unix()
+			timestamp = (*value).UnixNano()
 		}
 	case *int16:
 		timestamp = int64(*value)
@@ -63,21 +64,21 @@ func (dt *DateTime) Write(encoder *binary.Encoder, v interface{}) error {
 		}
 	}
 
-	return encoder.Int32(int32(timestamp))
+	return encoder.Int64(timestamp)
 }
 
-func (dt *DateTime) parse(value string) (int64, error) {
-	tv, err := time.Parse("2006-01-02 15:04:05", value)
+func (dt *DateTime64) parse(value string) (int64, error) {
+	tv, err := time.Parse("2006-01-02 15:04:05.999999999", value)
 	if err != nil {
 		return 0, err
 	}
 	return time.Date(
-		time.Time(tv).Year(),
-		time.Time(tv).Month(),
-		time.Time(tv).Day(),
-		time.Time(tv).Hour(),
-		time.Time(tv).Minute(),
-		time.Time(tv).Second(),
-		0, time.UTC,
-	).Unix(), nil
+		tv.Year(),
+		tv.Month(),
+		tv.Day(),
+		tv.Hour(),
+		tv.Minute(),
+		tv.Second(),
+		tv.Nanosecond(), time.UTC,
+	).UnixNano(), nil
 }

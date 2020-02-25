@@ -3,8 +3,8 @@ package writebuffer
 import (
 	"testing"
 
-	"github.com/ClickHouse/clickhouse-go/lib/leakypool"
 	"github.com/stretchr/testify/assert"
+	"github.com/yetialex/clickhouse-go/lib/leakypool"
 )
 
 func Test_WriteBuffer_SafeWithLeakyPool(t *testing.T) {

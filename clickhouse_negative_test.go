@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"testing"
 
-	"github.com/ClickHouse/clickhouse-go"
 	"github.com/stretchr/testify/assert"
+	"github.com/yetialex/clickhouse-go"
 )
 
 func Test_Negative_OpenConnectAndPing(t *testing.T) {

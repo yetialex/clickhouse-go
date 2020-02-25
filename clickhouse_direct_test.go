@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ClickHouse/clickhouse-go"
-	"github.com/ClickHouse/clickhouse-go/lib/column"
-	"github.com/ClickHouse/clickhouse-go/lib/types"
 	"github.com/stretchr/testify/assert"
+	"github.com/yetialex/clickhouse-go"
+	"github.com/yetialex/clickhouse-go/lib/column"
+	"github.com/yetialex/clickhouse-go/lib/types"
 )
 
 func Test_DirectInsert(t *testing.T) {

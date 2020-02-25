@@ -8,9 +8,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ClickHouse/clickhouse-go/lib/binary"
-	columns "github.com/ClickHouse/clickhouse-go/lib/column"
 	"github.com/stretchr/testify/assert"
+	"github.com/yetialex/clickhouse-go/lib/binary"
+	columns "github.com/yetialex/clickhouse-go/lib/column"
 )
 
 func Test_Column_Int8(t *testing.T) {
@@ -455,6 +455,35 @@ func Test_Column_DateTime(t *testing.T) {
 			}
 		}
 		if assert.Equal(t, "column_name", column.Name()) && assert.Equal(t, "DateTime", column.CHType()) {
+			assert.Equal(t, reflect.TypeOf(time.Time{}).Kind(), column.ScanType().Kind())
+		}
+		if err := column.Write(encoder, int8(0)); assert.Error(t, err) {
+			if e, ok := err.(*columns.ErrUnexpectedType); assert.True(t, ok) {
+				assert.Equal(t, int8(0), e.T)
+			}
+		}
+	}
+}
+
+func Test_Column_DateTime64(t *testing.T) {
+	var (
+		buf     bytes.Buffer
+		timeNow = time.Now().Truncate(time.Microsecond)
+		encoder = binary.NewEncoder(&buf)
+		decoder = binary.NewDecoder(&buf)
+	)
+	if column, err := columns.Factory("column_name", "DateTime64(6)", time.Local); assert.NoError(t, err) {
+		if err := column.Write(encoder, timeNow); assert.NoError(t, err) {
+			if v, err := column.Read(decoder); assert.NoError(t, err) {
+				assert.Equal(t, timeNow, v)
+			}
+		}
+		if err := column.Write(encoder, timeNow.In(time.UTC).Format("2006-01-02 15:04:05.999999")); assert.NoError(t, err) {
+			if v, err := column.Read(decoder); assert.NoError(t, err) {
+				assert.Equal(t, timeNow, v)
+			}
+		}
+		if assert.Equal(t, "column_name", column.Name()) && assert.Equal(t, "DateTime64(6)", column.CHType()) {
 			assert.Equal(t, reflect.TypeOf(time.Time{}).Kind(), column.ScanType().Kind())
 		}
 		if err := column.Write(encoder, int8(0)); assert.Error(t, err) {

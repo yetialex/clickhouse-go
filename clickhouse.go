@@ -13,11 +13,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ClickHouse/clickhouse-go/lib/binary"
-	"github.com/ClickHouse/clickhouse-go/lib/column"
-	"github.com/ClickHouse/clickhouse-go/lib/data"
-	"github.com/ClickHouse/clickhouse-go/lib/protocol"
-	"github.com/ClickHouse/clickhouse-go/lib/types"
+	"github.com/yetialex/clickhouse-go/lib/binary"
+	"github.com/yetialex/clickhouse-go/lib/column"
+	"github.com/yetialex/clickhouse-go/lib/data"
+	"github.com/yetialex/clickhouse-go/lib/protocol"
+	"github.com/yetialex/clickhouse-go/lib/types"
 )
 
 type (
