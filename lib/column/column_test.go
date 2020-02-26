@@ -468,7 +468,7 @@ func Test_Column_DateTime(t *testing.T) {
 func Test_Column_DateTime64(t *testing.T) {
 	var (
 		buf     bytes.Buffer
-		timeNow = time.Now().Truncate(time.Microsecond)
+		timeNow = time.Now().Truncate(time.Millisecond)
 		encoder = binary.NewEncoder(&buf)
 		decoder = binary.NewDecoder(&buf)
 	)

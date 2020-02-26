@@ -18,7 +18,7 @@ func (dt *DateTime64) Read(decoder *binary.Decoder) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	return time.Unix(0, nsec).In(dt.Timezone), nil
+	return time.Unix(0, nsec*int64(iPow(10, 9-dt.precision))).In(dt.Timezone), nil
 }
 
 func (dt *DateTime64) Write(encoder *binary.Encoder, v interface{}) error {
@@ -65,7 +65,7 @@ func (dt *DateTime64) Write(encoder *binary.Encoder, v interface{}) error {
 		}
 	}
 
-	return encoder.Int64(timestamp)
+	return encoder.Int64(timestamp / int64(iPow(10, 9-dt.precision)))
 }
 
 func (dt *DateTime64) parse(value string) (int64, error) {
@@ -98,4 +98,16 @@ func parseDateTime64(name, chType string, timezone *time.Location) (*DateTime64,
 		precision: precision,
 		Timezone:  timezone,
 	}, nil
+}
+
+func iPow(a, b int) int {
+	p := 1
+	for b > 0 {
+		if b&1 != 0 {
+			p *= a
+		}
+		b >>= 1
+		a *= a
+	}
+	return p
 }
