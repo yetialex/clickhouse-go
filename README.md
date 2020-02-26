@@ -1,4 +1,4 @@
-# ClickHouse [![Build Status](https://travis-ci.org/ClickHouse/clickhouse-go.svg?branch=master)](https://travis-ci.org/ClickHouse/clickhouse-go) [![Go Report Card](https://goreportcard.com/badge/github.com/ClickHouse/clickhouse-go)](https://goreportcard.com/report/github.com/ClickHouse/clickhouse-go) [![codecov](https://codecov.io/gh/ClickHouse/clickhouse-go/branch/master/graph/badge.svg)](https://codecov.io/gh/ClickHouse/clickhouse-go)
+# ClickHouse [![Build Status](https://travis-ci.org/yetialex/clickhouse-go.svg?branch=master)](https://travis-ci.org/yetialex/clickhouse-go) [![Go Report Card](https://goreportcard.com/badge/github.com/yetialex/clickhouse-go)](https://goreportcard.com/report/github.com/yetialex/clickhouse-go) [![codecov](https://codecov.io/gh/yetialex/clickhouse-go/branch/master/graph/badge.svg)](https://codecov.io/gh/yetialex/clickhouse-go)
 
 Golang SQL database driver for [Yandex ClickHouse](https://clickhouse.yandex/)
 
@@ -9,6 +9,7 @@ Golang SQL database driver for [Yandex ClickHouse](https://clickhouse.yandex/)
 * Round Robin load-balancing
 * Bulk write support :  `begin->prepare->(in loop exec)->commit`
 * LZ4 compression support (default to use pure go lz4, switch to use cgo lz4 by turn clz4 build tags on)
+* added DateTime64(N) support
 
 ## DSN
 
@@ -44,6 +45,7 @@ tcp://host1:9000?username=user&password=qwerty&database=clicks&read_timeout=10&w
 * FixedString(N)
 * Date
 * DateTime
+* DateTime64(N)
 * IPv4
 * IPv6
 * Enum
@@ -57,7 +59,7 @@ tcp://host1:9000?username=user&password=qwerty&database=clicks&read_timeout=10&w
 
 ## Install
 ```
-go get -u github.com/ClickHouse/clickhouse-go
+go get -u github.com/yetialex/clickhouse-go
 ```
 
 ## Example
@@ -70,7 +72,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/ClickHouse/clickhouse-go"
+	"github.com/yetialex/clickhouse-go"
 )
 
 func main() {
@@ -163,7 +165,7 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
-	_ "github.com/ClickHouse/clickhouse-go"
+	_ "github.com/yetialex/clickhouse-go"
 )
 
 func main() {
